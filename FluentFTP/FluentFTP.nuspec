@@ -3,21 +3,24 @@
 	<metadata>
 	
 		<id>FluentFTP</id>
-		<version>16.3.0</version>
+		<version>17.6.1</version>
 		<title>FluentFTP</title>
-		<authors>J.P. Trosclair, Harsh Gupta</authors>
+		<authors>J.P. Trosclair, Harsh Gupta, FluentFTP Contributors</authors>
 		<owners>Harsh Gupta</owners>
 		<licenseUrl>https://github.com/hgupta9/FluentFTP/blob/master/LICENSE.TXT</licenseUrl>
 		<projectUrl>https://github.com/hgupta9/FluentFTP</projectUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
-		<description>An FTP and FTPS library for .NET &amp; .NET Core, optimized for speed. Provides extensive FTP commands, file uploads/downloads, SSL/TLS connections and FTP proxies.</description>
+		<description>An FTP and FTPS client for .NET &amp; .NET Standard, optimized for speed. Provides extensive FTP commands, File uploads/downloads, SSL/TLS connections, Automatic directory listing parsing, File hashing/checksums, File permissions/CHMOD, FTP proxies, UTF-8 support, Async/await support and more. Written entirely in C#, with no external dependencies.</description>
+		<summary>An FTP and FTPS client for .NET &amp; .NET Standard, optimized for speed. Provides extensive FTP commands, SSL/TLS, hashing, checksums, permissions, FTP proxies, UTF-8, async/await and more.</summary>
 		<copyright>MIT License</copyright>
 		<language>en-US</language>
 		<tags>ftp,ftp-client,ftps,ssl,tls,unix,iis</tags>
 		
 		<frameworkAssemblies>
 		  <frameworkAssembly assemblyName="System.Web" targetFramework="net20"  />
+		  <frameworkAssembly assemblyName="System.Web" targetFramework="net35"  />
 		  <frameworkAssembly assemblyName="System.Web" targetFramework="net40"  />
+		  <frameworkAssembly assemblyName="System.Web" targetFramework="net45"  />
 		</frameworkAssemblies>
 		
 		<dependencies>
@@ -25,7 +28,13 @@
 			<group targetFramework=".NETFramework2.0">
 			</group>
 			
+			<group targetFramework=".NETFramework3.5">
+			</group>
+			
 			<group targetFramework=".NETFramework4.0">
+			</group>
+			
+			<group targetFramework=".NETFramework4.5">
 			</group>
 			
 			<group targetFramework="DNXCore5.0">
@@ -35,6 +44,17 @@
 				<dependency id="System.Net.NameResolution" version="4.3.0" />
 				<dependency id="System.Net.Sockets" version="4.3.0" />
 				<dependency id="System.Net.Security" version="4.3.0" />
+				<dependency id="System.Threading.Thread" version="4.3.0" />
+				<dependency id="System.Threading.Tasks" version="4.3.0" />
+			</group>
+			
+			<group targetFramework=".NETStandard1.4">
+				<dependency id="System.Runtime" version="4.3.0" />
+				<dependency id="System.Collections" version="4.3.0" />
+				<dependency id="System.IO" version="4.3.0" />
+				<dependency id="System.Net.NameResolution" version="4.3.0" />
+				<dependency id="System.Net.Sockets" version="4.3.0" />
+				<dependency id="System.Threading.Tasks" version="4.3.0" />
 			</group>
 			
 			<group targetFramework=".NETStandard1.6">
@@ -44,6 +64,8 @@
 				<dependency id="System.Net.NameResolution" version="4.3.0" />
 				<dependency id="System.Net.Sockets" version="4.3.0" />
 				<dependency id="System.Net.Security" version="4.3.0" />
+				<dependency id="System.Threading.Thread" version="4.3.0" />
+				<dependency id="System.Threading.Tasks" version="4.3.0" />
 			</group>
 			
 		</dependencies>

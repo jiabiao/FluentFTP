@@ -14,15 +14,42 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\net45\</OutputPath>
+    <DefineConstants>DEBUG;NETFX;NETFX45</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <DocumentationFile>bin\Debug\net45\FluentFTP.xml</DocumentationFile>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\net45\</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <DocumentationFile>bin\Release\net45\FluentFTP.xml</DocumentationFile>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <DefineConstants>NETFX;NETFX45</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugNET4|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
     <OutputPath>bin\Debug\net40\</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
+    <DefineConstants>DEBUG;NETFX;NETFX40</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <DocumentationFile>bin\Debug\net40\FluentFTP.xml</DocumentationFile>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseNET4|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\net40\</OutputPath>
@@ -32,17 +59,20 @@
     <DocumentationFile>bin\Release\net40\FluentFTP.xml</DocumentationFile>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <DefineConstants>NETFX;NETFX40</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugNET2|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\Debug\net20\</OutputPath>
-    <DefineConstants>DEBUG;NET2</DefineConstants>
+    <DefineConstants>DEBUG;NET2;NETFX;LINQBRIDGE_LIB</DefineConstants>
     <DocumentationFile>bin\Debug\net20\FluentFTP.xml</DocumentationFile>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseNET2|AnyCPU'">
     <DebugType>none</DebugType>
@@ -52,8 +82,36 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <DefineConstants>NET2</DefineConstants>
+    <DefineConstants>NET2;NETFX;LINQBRIDGE_LIB</DefineConstants>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>sn.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'DebugNET35|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Debug\net35\</OutputPath>
+    <DefineConstants>DEBUG;NET35;NETFX</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DocumentationFile>bin\Debug\net35\FluentFTP.xml</DocumentationFile>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseNET35|AnyCPU'">
+    <OutputPath>bin\Release\net35\</OutputPath>
+    <DefineConstants>NET35;NETFX</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DocumentationFile>bin\Release\net35\FluentFTP.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -61,25 +119,27 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Compile Include="NET2Compatibility.cs" />
+    <Compile Include="Client\FtpClient_Listing.cs" />
+    <Compile Include="Client\FtpClient_Management.cs" />
+    <Compile Include="Client\FtpClient_Hash.cs" />
+    <Compile Include="Client\FtpClient_HighLevel.cs" />
+    <Compile Include="Client\FtpClient_LowLevel.cs" />
+    <Compile Include="Helpers\FtpEvents.cs" />
+    <Compile Include="Helpers\FtpListParser.cs" />
+    <Compile Include="Stream\FtpSslStream.cs" />
+    <Compile Include="Utils\FtpReflection.cs" />
+    <Compile Include="Utils\NET2Compatibility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Extensions\GetChecksum.cs" />
-    <Compile Include="Extensions\MD5.cs" />
-    <Compile Include="FtpClient.cs" />
-    <Compile Include="FtpDataStream.cs" />
-    <Compile Include="FtpEnums.cs" />
-    <Compile Include="FtpExceptions.cs" />
-    <Compile Include="FtpExtensions.cs" />
-    <Compile Include="FtpHash.cs" />
-    <Compile Include="FtpListItem.cs" />
-    <Compile Include="FtpReply.cs" />
-    <Compile Include="FtpSocketStream.cs" />
-    <Compile Include="FtpTrace.cs" />
-    <Compile Include="Extensions\XCRC.cs" />
-    <Compile Include="Extensions\XMD5.cs" />
-    <Compile Include="Extensions\XSHA1.cs" />
-    <Compile Include="Extensions\XSHA256.cs" />
-    <Compile Include="Extensions\XSHA512.cs" />
+    <Compile Include="Client\FtpClient_Connection.cs" />
+    <Compile Include="Stream\FtpDataStream.cs" />
+    <Compile Include="Helpers\FtpEnums.cs" />
+    <Compile Include="Helpers\FtpExceptions.cs" />
+    <Compile Include="Utils\FtpExtensions.cs" />
+    <Compile Include="Helpers\FtpHash.cs" />
+    <Compile Include="Helpers\FtpListItem.cs" />
+    <Compile Include="Helpers\FtpReply.cs" />
+    <Compile Include="Stream\FtpSocketStream.cs" />
+    <Compile Include="Helpers\FtpTrace.cs" />
     <Compile Include="Proxy\FtpClientHttp11Proxy.cs" />
     <Compile Include="Proxy\FtpClientProxy.cs" />
     <Compile Include="Proxy\FtpClientUserAtHostProxy.cs" />
@@ -87,5 +147,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="FluentFTP.nuspec" />
+    <None Include="sn.snk" />
   </ItemGroup>
+  <ItemGroup />
 </Project>

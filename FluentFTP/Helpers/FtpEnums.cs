@@ -1,6 +1,7 @@
 ﻿using System;
 
 namespace FluentFTP {
+
 	/// <summary>
 	/// Defines the type of encryption to use
 	/// </summary>
@@ -10,11 +11,11 @@ namespace FluentFTP {
 		/// </summary>
 		None,
 		/// <summary>
-		/// Encryption is used from the start of the connection, port 990
+		/// FTPS encryption is used from the start of the connection, port 990.
 		/// </summary>
 		Implicit,
 		/// <summary>
-		/// Connection starts in plain text and encryption is enabled
+		/// Connection starts in plain text and FTPS encryption is enabled
 		/// with the AUTH command immediately after the server greeting.
 		/// </summary>
 		Explicit
@@ -33,11 +34,11 @@ namespace FluentFTP {
 		/// </summary>
 		PositivePreliminary = 1,
 		/// <summary>
-		/// Successs
+		/// Success
 		/// </summary>
 		PositiveCompletion = 2,
 		/// <summary>
-		/// Succcess
+		/// Success
 		/// </summary>
 		PositiveIntermediate = 3,
 		/// <summary>
@@ -85,7 +86,7 @@ namespace FluentFTP {
 		PRET = 32,
 		/// <summary>
 		/// Server supports the MFMT command for setting the
-		/// modifid date of an object on the server
+		/// modified date of an object on the server
 		/// </summary>
 		MFMT = 64,
 		/// <summary>
@@ -95,7 +96,7 @@ namespace FluentFTP {
 		MFCT = 128,
 		/// <summary>
 		/// Server supports the MFF command for setting certain facts
-		/// about file sytem objects. If you need this command, it would
+		/// about file system objects. If you need this command, it would
 		/// probably be handy to query FEAT your self and have a look at
 		/// the FtpReply.InfoMessages property to see which facts the server
 		/// allows you to modify.
@@ -200,7 +201,7 @@ namespace FluentFTP {
 		/// <summary>
 		/// Passive data connection. EPSV is a better
 		/// option if it's supported. Passive connections
-		/// connect to the IP address dicated by the server
+		/// connect to the IP address dictated by the server
 		/// which may or may not be accessible by the client
 		/// for example a server behind a NAT device may
 		/// give an IP address on its local network that
@@ -212,7 +213,7 @@ namespace FluentFTP {
 		PASV,
 		/// <summary>
 		/// Same as PASV except the host supplied by the server is ignored
-		/// and the data conncetion is made to the same address that the control
+		/// and the data connection is made to the same address that the control
 		/// connection is connected to. This is useful in scenarios where the
 		/// server supplies a private/non-routable network address in the
 		/// PASV response. It's functionally identical to EPSV except some
@@ -260,7 +261,7 @@ namespace FluentFTP {
 		/// which requires firewall exceptions on the client
 		/// as well as client network when connecting to a 
 		/// server outside of the client's network. The server
-		/// connects to the IP address it sees the client comming
+		/// connects to the IP address it sees the client coming
 		/// from. This type of data connection supports IPv4 and IPv6.
 		/// </summary>
 		EPRT
@@ -312,7 +313,7 @@ namespace FluentFTP {
 		/// </summary>
 		Execute = 1,
 		/// <summary>
-		/// Writeable
+		/// Writable
 		/// </summary>
 		Write = 2,
 		/// <summary>
@@ -345,10 +346,57 @@ namespace FluentFTP {
 	}
 
 	/// <summary>
-	/// Flags that can dicate how a file listing is performed
+	/// The type of response the server responded with
+	/// </summary>
+	public enum FtpParser : int {
+		/// <summary>
+		/// Use the legacy parser (for older projects that depend on the pre-2017 parser routines).
+		/// </summary>
+		Legacy = -1,
+		/// <summary>
+		/// Automatically detect the file listing parser to use based on the FTP server (SYST command).
+		/// </summary>
+		Auto = 0,
+		/// <summary>
+		/// Machine listing parser, works on any FTP server supporting the MLST/MLSD commands.
+		/// </summary>
+		Machine = 1,
+		/// <summary>
+		/// File listing parser for Windows/IIS.
+		/// </summary>
+		Windows = 2,
+		/// <summary>
+		/// File listing parser for Unix.
+		/// </summary>
+		Unix = 3,
+		/// <summary>
+		/// Alternate parser for Unix. Use this if the default one does not work.
+		/// </summary>
+		UnixAlt = 4,
+		/// <summary>
+		/// File listing parser for Vax/VMS/OpenVMS.
+		/// </summary>
+		VMS = 5,
+		/// <summary>
+		/// File listing parser for IBM OS400.
+		/// </summary>
+		IBM = 6,
+		/// <summary>
+		/// File listing parser for Tandem/Nonstop Guardian OS.
+		/// </summary>
+		NonStop = 7
+	}
+
+	/// <summary>
+	/// Flags that can dictate how a file listing is performed
 	/// </summary>
 	[Flags]
 	public enum FtpListOption {
+		/// <summary>
+		/// Tries machine listings (MDTM command) if supported,
+		/// and if not then falls back to OS-specific listings (LIST command)
+		/// </summary>
+		Auto = 0,
 		/// <summary>
 		/// Load the modify date using MDTM when it could not
 		/// be parsed from the server listing. This only pertains
@@ -377,8 +425,8 @@ namespace FluentFTP {
 		/// </summary>
 		AllFiles = 4,
 		/// <summary>
-		/// Force the use of the NLST command even if MLSD
-		/// is supported by the server
+		/// Force the use of OS-specific listings (LIST command) even if
+		/// machine listings (MLSD command) are supported by the server
 		/// </summary>
 		ForceList = 8,
 		/// <summary>
@@ -386,11 +434,12 @@ namespace FluentFTP {
 		/// </summary>
 		NameList = 16,
 		/// <summary>
-		/// Combines the ForceList and NameList flags
+		/// Force the use of the NLST command (the slowest mode) even if machine listings
+		/// and OS-specific listings are supported by the server
 		/// </summary>
 		ForceNameList = ForceList | NameList,
 		/// <summary>
-		/// Try to dereference symbolic links
+		/// Try to dereference symbolic links, and stored the linked file/directory in FtpListItem.LinkObject
 		/// </summary>
 		DerefLinks = 32,
 		/// <summary>
@@ -400,8 +449,8 @@ namespace FluentFTP {
 		/// </summary>
 		UseLS = 64 | ForceList,
 		/// <summary>
-		/// Adds the -r option to the list command. Some servers may not
-		/// support this feature.
+		/// Gets files within subdirectories as well. Adds the -r option to the LIST command.
+		/// Some servers may not support this feature.
 		/// </summary>
 		Recursive = 128,
 		/// <summary>
@@ -416,4 +465,120 @@ namespace FluentFTP {
 		/// </summary>
 		IncludeSelfAndParent = 512
 	}
+
+	/// <summary>
+	/// Defines the behavior for uploading/downloading files that already exist
+	/// </summary>
+	public enum FtpExists {
+		/// <summary>
+		/// Do not check if the file exists. A bit faster than the other options. Only use this if you are SURE that the file does not exist on the server.
+		/// Otherwise it can cause the UploadFile method to hang due to filesize mismatch.
+		/// </summary>
+		NoCheck,
+		/// <summary>
+		/// Skip the file if it exists, without any more checks.
+		/// </summary>
+		Skip,
+		/// <summary>
+		/// Overwrite the file if it exists.
+		/// </summary>
+		Overwrite,
+		/// <summary>
+		/// Append to the file if it exists, by checking the length and adding the missing data.
+		/// </summary>
+		Append
+	}
+
+    /// <summary>
+    /// Defines the level of the tracing message.  Depending on the framework version this is translated
+    /// to an equivalent logging level in System.Diagnostices (if available)
+    /// </summary>
+    public enum FtpTraceLevel {
+        /// <summary>
+        /// Used for logging Debug or Verbose level messages
+        /// </summary>
+        Verbose,
+        /// <summary>
+        /// Used for logging Informational messages
+        /// </summary>
+        Info,
+        /// <summary>
+        /// Used for logging non-fatal or ignorable error messages
+        /// </summary>
+        Warn,
+        /// <summary>
+        /// Used for logging Error messages that may need investigation 
+        /// </summary>
+        Error
+    }
+
+    /// <summary>
+    /// Defines how multi-file processes should handle a processing error.
+    /// </summary>
+    /// <remarks><see cref="FtpError.Stop"/> &amp; <see cref="FtpError.Throw"/> Cannot Be Combined</remarks>
+    [Flags]
+    public enum FtpError {
+        /// <summary>
+        /// No action is taken upon errors.  The method absorbs the error and continues.
+        /// </summary>
+        None = 0,
+        /// <summary>
+        /// If any files have completed successfully (or failed after a partial download/upload) then should be deleted.  
+        /// This will simulate an all-or-nothing transaction downloading or uploading multiple files.  If this option is not
+        /// combined with <see cref="FtpError.Stop"/> or <see cref="FtpError.Throw"/> then the method will
+        /// continue to process all items whether if they are successful or not and then delete everything if a failure was
+        /// encountered at any point.
+        /// </summary>
+        DeleteProcessed = 1,
+        /// <summary>
+        /// The method should stop processing any additional files and immediately return upon encountering an error.
+        /// Cannot be combined with <see cref="FtpError.Throw"/>
+        /// </summary>
+        Stop = 2,
+        /// <summary>
+        /// The method should stop processing any additional files and immediately throw the current error.
+        /// Cannot be combined with <see cref="FtpError.Stop"/>
+        /// </summary>
+        Throw = 4,
+        
+    }
+
+    /// <summary>
+    /// Defines if additional verification and actions upon failure that 
+    /// should be performed when uploading/downloading files using the high-level APIs.  Ignored if the 
+    /// FTP server does not support any hashing algorithms.
+    /// </summary>
+	[Flags]
+    public enum FtpVerify {
+        /// <summary>
+        /// No verification of the file is performed
+        /// </summary>
+        None = 0,
+        /// <summary>
+		/// The checksum of the file is verified, if supported by the server.
+		/// If the checksum comparison fails then we retry the download/upload
+		/// a specified amount of times before giving up. (See <see cref="FtpClient.RetryAttempts"/>)
+        /// </summary>
+        Retry = 1,
+        /// <summary>
+		/// The checksum of the file is verified, if supported by the server.
+		/// If the checksum comparison fails then the failed file will be deleted.
+		/// If combined with <see cref="FtpVerify.Retry"/>, then
+        /// the deletion will occur if it fails upon the final retry.
+        /// </summary>
+        Delete = 2,
+		/// <summary>
+		/// The checksum of the file is verified, if supported by the server.
+		/// If the checksum comparison fails then an exception will be thrown.
+		/// If combined with <see cref="FtpVerify.Retry"/>, then the throw will
+		/// occur upon the failure of the final retry, and/or if combined with <see cref="FtpVerify.Delete"/>
+		/// the method will throw after the deletion is processed.
+        /// </summary>
+		Throw = 4,
+		/// <summary>
+		/// The checksum of the file is verified, if supported by the server.
+		/// If the checksum comparison fails then the method returns false and no other action is taken.
+		/// </summary>
+		OnlyChecksum = 8,
+    }
 }

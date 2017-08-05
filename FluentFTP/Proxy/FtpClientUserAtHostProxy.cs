@@ -8,6 +8,9 @@ namespace FluentFTP.Proxy {
 			ConnectionType = "User@Host";
 		}
 
+	    /// <summary>
+	    /// Creates a new instance of this class. Useful in FTP proxy classes.
+	    /// </summary>
 		protected override FtpClient Create() {
 			return new FtpClientUserAtHostProxy(Proxy);
 		}
@@ -18,7 +21,7 @@ namespace FluentFTP.Proxy {
 			if (Proxy.Credentials != null)
 				Authenticate(Proxy.Credentials.UserName, Proxy.Credentials.Password);
 
-			// Connection USER@Host meens to change user name to add host.
+			// Connection USER@Host means to change user name to add host.
 			Credentials.UserName = Credentials.UserName + "@" + Host;
 		}
 	}

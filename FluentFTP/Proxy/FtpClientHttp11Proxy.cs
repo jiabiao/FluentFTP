@@ -20,14 +20,28 @@ namespace FluentFTP.Proxy {
 										proxyConnectionReply.ErrorMessage);
 		}
 
+	    /// <summary>
+	    /// Creates a new instance of this class. Useful in FTP proxy classes.
+	    /// </summary>
 		protected override FtpClient Create() {
 			return new FtpClientHttp11Proxy(Proxy);
 		}
 
+        /// <summary>
+        /// Connects to the server using an existing <see cref="FtpSocketStream"/>
+        /// </summary>
+        /// <param name="stream">The existing socket stream</param>
 		protected override void Connect(FtpSocketStream stream) {
 			Connect(stream, Host, Port, FtpIpVersion.ANY);
 		}
 
+        /// <summary>
+        /// Connects to the server using an existing <see cref="FtpSocketStream"/>
+        /// </summary>
+        /// <param name="stream">The existing socket stream</param>
+        /// <param name="host">Host name</param>
+        /// <param name="port">Port number</param>
+        /// <param name="ipVersions">IP version to use</param>
 		protected override void Connect(FtpSocketStream stream, string host, int port, FtpIpVersion ipVersions) {
 			base.Connect(stream);
 
@@ -35,8 +49,8 @@ namespace FluentFTP.Proxy {
 			writer.WriteLine("CONNECT {0}:{1} HTTP/1.1", host, port);
 			writer.WriteLine("Host: {0}:{1}", host, port);
 			if (Proxy.Credentials != null) {
-				var credentialsHash = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(string.Format("{0}:{1}", Proxy.Credentials.UserName, Proxy.Credentials.Password)));
-				writer.WriteLine("Proxy-Authorization: Basic {0}", credentialsHash);
+				var credentialsHash = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(Proxy.Credentials.UserName + ":"+ Proxy.Credentials.Password));
+				writer.WriteLine("Proxy-Authorization: Basic "+ credentialsHash);
 			}
 			writer.WriteLine("User-Agent: custom-ftp-client");
 			writer.WriteLine();
@@ -50,33 +64,51 @@ namespace FluentFTP.Proxy {
 			if (!proxyConnectionReply.Success)
 				throw new FtpException("Can't connect " + Host + " via proxy " + Proxy.Host + ".\nMessage : " + proxyConnectionReply.ErrorMessage);
 		}
-
-		private FtpReply GetProxyReply(FtpSocketStream stream) {
-
+		
+		private FtpReply GetProxyReply( FtpSocketStream stream ) {
+			
 			FtpReply reply = new FtpReply();
 			string buf;
 
-			lock (Lock) {
-				if (!IsConnected)
-					throw new InvalidOperationException("No connection to the server has been established.");
-
+#if !CORE14
+            lock ( Lock ) {
+#endif
+				if( !IsConnected )
+					throw new InvalidOperationException( "No connection to the server has been established." );
+				
 				stream.ReadTimeout = ReadTimeout;
-				while ((buf = stream.ReadLine(Encoding)) != null) {
+				while( ( buf = stream.ReadLine( Encoding ) ) != null ) {
 					Match m;
-
-					FtpTrace.WriteLine(buf);
-
-					if ((m = Regex.Match(buf, @"^HTTP/.*\s(?<code>[0-9]{3}) (?<message>.*)$")).Success) {
-						reply.Code = m.Groups["code"].Value;
-						reply.Message = m.Groups["message"].Value;
+					
+					FtpTrace.WriteLine(FtpTraceLevel.Info, buf);
+					
+					if( ( m = Regex.Match( buf, @"^HTTP/.*\s(?<code>[0-9]{3}) (?<message>.*)$" ) ).Success ) {
+						reply.Code = m.Groups[ "code" ].Value;
+						reply.Message = m.Groups[ "message" ].Value;
 						break;
 					}
-
-					reply.InfoMessages += string.Format("{0}\n", buf);
+					
+					reply.InfoMessages += ( buf+"\n" );
 				}
-			}
+				
+				// fixes #84 (missing bytes when downloading/uploading files through proxy)
+				while( ( buf = stream.ReadLine( Encoding ) ) != null ) {
+
+                    FtpTrace.WriteLine(FtpTraceLevel.Info, buf);
+
+					if (FtpExtensions.IsNullOrWhiteSpace(buf)) {
+						break;
+					}
+					
+					reply.InfoMessages += ( buf+"\n" );
+				}
+
+#if !CORE14
+            }
+#endif
 
 			return reply;
 		}
+
 	}
 }
